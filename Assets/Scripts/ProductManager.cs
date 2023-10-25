@@ -63,14 +63,15 @@ namespace Gybe.Game
                             Math.Min(dataList.FindCrop(product).maximumProductCount - _productCounts[product],
                                 crop.howManyProduct);
 
-                        List<GameObject> crops = new List<GameObject>();
+                        List<Crop> crops = new List<Crop>();
                         for (int i = 0; i < cropCount; i++)
                         {
                             var valCrop = _pool.Get(product);
                             if (valCrop != null)
                             {
-                                valCrop.GetComponent<Crop>().OnObjectCollected += Depool;
-                                crops.Add(valCrop);
+                                var cropObj = valCrop.GetComponent<Crop>();
+                                cropObj.OnObjectCollected += Depool;
+                                crops.Add(cropObj);
                             }
                         }
                         

@@ -10,11 +10,13 @@ namespace Gybe.Game
     {
         public List<Transform> spawnPositions;
 
-        private List<GameObject> _crops;
+        private List<Crop> _crops;
+        
+        [Range(0, 10)]
+        public float scatterDistance = 3.0f;
         // Start is called before the first frame update
         void Start()
         {
-            _crops = new List<GameObject>();
         }
 
         // Update is called once per frame
@@ -28,8 +30,6 @@ namespace Gybe.Game
             {
                 SpreadCrops();
                 OnOnObjectCollected(gameObject);
-                
-                
             }
         }
 
@@ -38,32 +38,37 @@ namespace Gybe.Game
             foreach (var crop in _crops)
             {
                 crop.gameObject.SetActive(true);
-                crop.GetComponent<SphereCollider>().isTrigger = false;
-                Vector3? spawnPosition = NavMeshUtils.FindRandomPosition(transform.position, 5, -1);
+                Vector3? spawnPosition = NavMeshUtils.FindRandomPosition(transform.position, scatterDistance, -1);
                 if (spawnPosition.HasValue)
                 {
-                    crop.transform.position = spawnPosition.Value;
+                    crop.Scatter(spawnPosition.Value);
+                    //crop.transform.position = spawnPosition.Value;
                 }
             }
         }
-        public void SetCrops(List<GameObject> cropList)
+        public void SetCrops(List<Crop> cropList)
         {
             _crops = cropList;
             var count = Math.Min(_crops.Count, spawnPositions.Count);
             for (int i = 0; i < count; i++)
             {
                 _crops[i].transform.position = spawnPositions[i].position;
-                _crops[i].GetComponent<SphereCollider>().isTrigger = true;
             }
 
             for (int i = count; i < _crops.Count; i++)
             {   
+                _crops[i].transform.position = transform.position;
                 _crops[i].gameObject.SetActive(false);
-                _crops[i].GetComponent<SphereCollider>().isTrigger = true;
             }
         }
 
-        void OnDisable()
+        private void OnEnable()
+        {
+            if(_crops == null)
+                _crops = new List<Crop>();
+        }
+
+        private void OnDisable()
         {
             _crops.Clear();
             

@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemClass: {fileID: 11400000, guid: 8001d2f26eb0d40919117d6465b26bf1, type: 2}
   cropSO: {fileID: 11400000, guid: 1f2db8be9d8484a1e82620a1e0b14660, type: 2}
+  scatterAnimCoeff: 0.047
 --- !u!135 &5934350866462214433
 SphereCollider:
   m_ObjectHideFlags: 0

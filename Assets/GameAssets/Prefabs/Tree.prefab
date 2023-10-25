@@ -86,6 +86,7 @@ MonoBehaviour:
   - {fileID: 442533266801245460}
   - {fileID: 5462329706096397488}
   - {fileID: 6163733100406213701}
+  scatterDistance: 3.05
 --- !u!65 &4597116077762811183
 BoxCollider:
   m_ObjectHideFlags: 0
