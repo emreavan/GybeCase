@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e8ad06e7d6f44caf8ee87020fee633a, type: 3}
+  m_Name: Banana
+  m_EditorClassIdentifier: 
+  itemClass: {fileID: 11400000, guid: af1939cb2e1d84998b3fda4b77c9e9be, type: 2}
+  gameObject: {fileID: 304467429076419201, guid: 5db4a1aa6119b4a0186a5349bd8c1cc0,
+    type: 3}
+  pooledCount: 10
+  sprite: {fileID: 21300000, guid: 1d82bc928b6e14496b15d796bb9c8f25, type: 3}
+  plant: {fileID: 11400000, guid: 4ae3d95644ed64db5bc1c31317483c0f, type: 2}
+  spawnCoefficient: 0
+  howManyProduct: 0
+  readyTimeInMs: 0
+  maximumProductCount: 0
+  minimumLevel: 0
