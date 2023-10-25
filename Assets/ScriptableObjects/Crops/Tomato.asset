@@ -19,7 +19,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 2b2d19d81d94e4cf99d2817f4b29ac55, type: 3}
   plant: {fileID: 11400000, guid: 4ae3d95644ed64db5bc1c31317483c0f, type: 2}
   spawnCoefficient: 1
-  howManyProduct: 3
+  howManyProduct: 5
   readyTimeInMs: 1000
   maximumProductCount: 100
   minimumLevel: 0

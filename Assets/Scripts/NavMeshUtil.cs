@@ -16,4 +16,19 @@ public class NavMeshUtils
         }
         return null;
     }
+    
+    public static Vector3? FindRandomPosition(Vector3 center, float range, int layerMask)
+    {
+        for (int i = 0; i < 30; i++)  // tries for 30 times (this number can be adjusted)
+        {
+            Vector3 randomDirection = Random.insideUnitSphere * range;
+            randomDirection += center;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomDirection, out hit, range, layerMask))
+            {
+                return hit.position;
+            }
+        }
+        return null;  // return null if a valid position is not found
+    }
 }

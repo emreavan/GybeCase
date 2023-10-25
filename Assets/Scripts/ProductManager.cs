@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Pool;
+using Random = UnityEngine.Random;
 
 
 namespace Gybe.Game
@@ -54,11 +57,26 @@ namespace Gybe.Game
                     if (spawnPosition.HasValue)
                     {
                         val.transform.position = spawnPosition.Value;
-                        val.GetComponent<Item>().OnObjectCollected += Depool;
                         
+
+                        int cropCount =
+                            Math.Min(dataList.FindCrop(product).maximumProductCount - _productCounts[product],
+                                crop.howManyProduct);
+
+                        List<GameObject> crops = new List<GameObject>();
+                        for (int i = 0; i < cropCount; i++)
+                        {
+                            var valCrop = _pool.Get(product);
+                            if (valCrop != null)
+                            {
+                                valCrop.GetComponent<Crop>().OnObjectCollected += Depool;
+                                crops.Add(valCrop);
+                            }
+                        }
                         
-                        //Add crop to that position
-                        //&& dataList.FindCrop(product).maximumProductCount > _productCounts[product]
+                        var plant = val.GetComponent<Plant>();
+                        plant.OnObjectCollected += Depool;
+                        plant.SetCrops(crops);
                     }
                     else
                     {
