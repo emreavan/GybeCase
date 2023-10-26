@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Pool;
+using Zenject;
 using Random = UnityEngine.Random;
 
 
@@ -12,6 +13,15 @@ namespace Gybe.Game
 {
     public class ProductManager : MonoBehaviour
     {
+        
+        private IPlayerData _playerData;
+
+        [Inject]
+        public void Construct(IPlayerData playerData)
+        {
+            _playerData = playerData;
+        }
+        
         public DataListSO dataList;
         private Dictionary<ItemClassSO, int> _productCounts;
 
@@ -89,9 +99,13 @@ namespace Gybe.Game
 
         private void Depool(GameObject obj)
         {
-            var crop = obj.GetComponent<Item>();
-            crop.OnObjectCollected -= Depool;
-            _pool.Return(crop.itemClass, obj);
+            var item = obj.GetComponent<Item>();
+            
+            if(obj.TryGetComponent<Crop>(out Crop cropVal))
+                _playerData.CollectCrop(cropVal.cropSO);
+            
+            item.OnObjectCollected -= Depool;
+            _pool.Return(item.itemClass, obj);
         }
     }
 }
