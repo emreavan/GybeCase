@@ -48,14 +48,23 @@ namespace Gybe.Game
             
             Order.Piece piece;
             piece.crop = crops[index].itemClass;
-            piece.quantity = Random.Range(0, 10);
+            piece.quantity = Random.Range(0, 10 * _playerData.Experience);
             
             list.Add(piece);
             Order newOrder = new Order(list);
             
             var ui = Container.InstantiatePrefabForComponent<OrderUI>(orderUIPrefab, transform.GetChild(0));
             ui.Initialize(newOrder);
+            ui.OnOrderCompleted += UiOnOnOrderCompleted;
         }
-        
+
+        private void UiOnOnOrderCompleted(Order order)
+        {
+            foreach (var piece in order.pieces)
+            {
+                _playerData.CollectedCrops[piece.crop] -= piece.quantity;
+                CreateRandomOrder();
+            }
+        }
     }
 }

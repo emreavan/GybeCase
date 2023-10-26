@@ -30,6 +30,7 @@ namespace Gybe.Game
         // Start is called before the first frame update
         void Start()
         {
+            Experience = 1;
             CollectedCrops = new Dictionary<ItemClassSO, int>();
             foreach (var var in dataList.cropList)
             {

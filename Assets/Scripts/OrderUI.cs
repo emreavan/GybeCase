@@ -53,7 +53,16 @@ namespace Gybe.Game
 
         public void ButtonClicked()
         {
-            
+            foreach (var piece in _order.pieces)
+            {
+                if (piece.quantity > _playerData.CollectedCrops[piece.crop])
+                {
+                    return;
+                }
+            }
+
+            OrderFinished();
+            Destroy(gameObject);
         }
 
         private void OrderFinished()
