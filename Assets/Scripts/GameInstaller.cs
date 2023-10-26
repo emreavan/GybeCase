@@ -9,7 +9,7 @@ namespace Gybe.Game
     public class GameInstaller : MonoInstaller
     {
         public GameObject playerDataServicePrefab;
-
+        public OrderUI orderUIPrefab;
         public override void InstallBindings()
         {
             Container.Bind<IPlayerData>()

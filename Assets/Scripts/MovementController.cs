@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
-
+using UnityEngine.EventSystems;
 namespace Gybe.Game
 {
 
@@ -53,7 +53,10 @@ namespace Gybe.Game
         void Update()
         {
             swipeDelta = Vector2.zero;
-
+            if (EventSystem.current.IsPointerOverGameObject() && _isDragging == false)
+            {
+                return;
+            }
             if (Input.GetMouseButtonDown(0))
             {
                 _isDragging = true;

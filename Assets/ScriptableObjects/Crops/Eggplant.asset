@@ -16,7 +16,7 @@ MonoBehaviour:
   gameObject: {fileID: 304467429076419201, guid: e5ca2c4dfd2b74e6495de5bab7820975,
     type: 3}
   pooledCount: 10
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: d0b25f30c870b4a9ea768b94132de64a, type: 3}
   plant: {fileID: 11400000, guid: 9cd916070bae84d008d28b2261468588, type: 2}
   spawnCoefficient: 0
   howManyProduct: 0
