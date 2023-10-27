@@ -17,7 +17,7 @@ MonoBehaviour:
     type: 3}
   pooledCount: 10
   sprite: {fileID: 21300000, guid: d0b25f30c870b4a9ea768b94132de64a, type: 3}
-  plant: {fileID: 11400000, guid: 9cd916070bae84d008d28b2261468588, type: 2}
+  plantItemClass: {fileID: 11400000, guid: 613c6574fe3424586903bbab914a3970, type: 2}
   spawnCoefficient: 0
   howManyProduct: 0
   readyTimeInMs: 0
