@@ -85,7 +85,7 @@ namespace Gybe.Game
             var cropSO = cropsData.dictionary[product];
             if (cropSO != null)
             {
-                var plantItemClass = cropSO.plant.itemClass;
+                var plantItemClass = cropSO.plantItemClass;
                 
                 var val = _pool.Get(plantItemClass);
                 if (val != null)
@@ -131,7 +131,7 @@ namespace Gybe.Game
             if (obj.TryGetComponent<Crop>(out Crop cropVal))
             {
                 _productCounts[cropVal.itemClass] -= 1;
-                _playerData.CollectCrop(cropVal.cropSO, 1);
+                _playerData.CollectCrop(cropVal.itemClass, 1);
             }
             
             item.OnObjectCollected -= DePool;

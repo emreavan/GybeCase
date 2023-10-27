@@ -8,7 +8,7 @@ namespace Gybe.Game
     public class CropSO : ProductSO
     {
         public Sprite sprite;
-        public PlantSO plant;
+        public ItemClassSO plantItemClass;
         public float spawnCoefficient;
         public int howManyProduct;
         public float readyTimeInMs;

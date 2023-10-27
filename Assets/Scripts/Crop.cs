@@ -8,7 +8,6 @@ namespace Gybe.Game
     public class Crop : Item
     {
         private SphereCollider _collider;
-        public CropSO cropSO;
 
         [Range(0, 1.0f)]
         public float scatterAnimCoeff = 0.1f;

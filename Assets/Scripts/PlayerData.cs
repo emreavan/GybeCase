@@ -7,7 +7,7 @@ namespace Gybe.Game
 {
     public interface IPlayerData
     {
-        void CollectCrop(CropSO crop, int amount);
+        void CollectCrop(ItemClassSO itemClass, int amount);
         void RemoveCrop(CropSO crop, int amount);
         void GainExperience(int amount);
         
@@ -48,9 +48,9 @@ namespace Gybe.Game
             }
         }
 
-        public void CollectCrop(CropSO crop, int amount)
+        public void CollectCrop(ItemClassSO itemClass, int amount)
         {
-            CollectedCrops[crop.itemClass] += amount;
+            CollectedCrops[itemClass] += amount;
         }
 
         public void RemoveCrop(CropSO crop, int amount)
