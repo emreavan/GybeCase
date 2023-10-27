@@ -32,7 +32,8 @@ namespace Gybe.Game
         public int Speed { get; set; }
         public int CollectionRange { get; set; }
         public int BaseExp { get; set;}
-        public DataListSO dataList;
+        
+        public CropsData cropsData;
         public event Action<int> OnLevelIncreased;
         public Dictionary<ItemClassSO, int> CollectedCrops { get; private set; }
         // Start is called before the first frame update
@@ -40,9 +41,10 @@ namespace Gybe.Game
         {
             Level = 1;
             CollectedCrops = new Dictionary<ItemClassSO, int>();
-            foreach (var var in dataList.cropList)
-            {
-                CollectedCrops.Add(var.itemClass, 0);
+            
+            foreach (var val in cropsData.dictionary)
+            { 
+                CollectedCrops.Add(val.Value.itemClass, 0);
             }
         }
 

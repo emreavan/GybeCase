@@ -15,7 +15,7 @@ namespace Gybe.Game
         private Order _order;
         
         public event Action<Order> OnOrderCompleted;
-        public DataListSO data;
+        public CropsData cropsData;
         private IPlayerData _playerData;
         
         [Inject]
@@ -47,7 +47,7 @@ namespace Gybe.Game
                 textList[i].gameObject.SetActive(true);
                 imageList[i].gameObject.SetActive(true);
                 textList[i].text = _order.pieces[i].quantity.ToString();
-                imageList[i].sprite = data.FindCrop(_order.pieces[i].crop).sprite;
+                imageList[i].sprite = cropsData.dictionary[_order.pieces[i].crop].sprite;
             }
         }
 

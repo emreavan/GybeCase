@@ -437,7 +437,7 @@ MonoBehaviour:
   imageList:
   - {fileID: 718490567561839253}
   - {fileID: 7433505047299409663}
-  data: {fileID: 11400000, guid: 40c728317fcbd47f1a463bce500ff030, type: 2}
+  cropsData: {fileID: 11400000, guid: 805eef7e1401f496b9047aac2f0c35e7, type: 2}
 --- !u!1 &6392652691388716665
 GameObject:
   m_ObjectHideFlags: 0

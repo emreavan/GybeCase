@@ -14,27 +14,34 @@ namespace Gybe.Game
         {
             public GameObject prefab;
             public int size;
-
-            public Pool(GameObject p, int s)
+            public ItemClassSO itemClass;
+            public Pool(GameObject p, int s, ItemClassSO i)
             {
                 prefab = p;
                 size = s;
+                itemClass = i;
             }
         }
 
-        [FormerlySerializedAs("productList")] public DataListSO dataList;
+        public CropsData cropsData;
+        public PlantsData plantsData;
         private List<Pool> _pools = new List<Pool>();
         private Dictionary<ScriptableObject, Stack<GameObject>> _poolDictionary;
 
         private void Awake()
         {
-            var dataList = this.dataList.GetDataList();
-
-            foreach (var data in dataList)
-            {
-                Pool pool = new Pool(data.gameObject, data.pooledCount);
+            foreach (var val in cropsData.dictionary)
+            { 
+                Pool pool = new Pool(val.Value.gameObject, val.Value.pooledCount, val.Value.itemClass);
                 _pools.Add(pool);
             }
+            
+            foreach (var val in plantsData.dictionary)
+            { 
+                Pool pool = new Pool(val.Value.gameObject, val.Value.pooledCount, val.Value.itemClass);
+                _pools.Add(pool);
+            }
+            
 
             _poolDictionary = new Dictionary<ScriptableObject, Stack<GameObject>>();
             foreach (Pool pool in _pools)
@@ -47,7 +54,7 @@ namespace Gybe.Game
                     objectPool.Push(instance);
                 }
                 
-                _poolDictionary.Add(pool.prefab.GetComponent<Item>().itemClass, objectPool);
+                _poolDictionary.Add(pool.itemClass, objectPool);
             }
         }
 
@@ -65,7 +72,7 @@ namespace Gybe.Game
                 // If pool is empty, create a new instance
                 foreach (Pool pool in _pools)
                 {
-                    if (pool.prefab.GetComponent<Item>().itemClass == type)
+                    if (pool.itemClass == type)
                     {
                         GameObject instance = Instantiate(pool.prefab);
                         instance.SetActive(true);

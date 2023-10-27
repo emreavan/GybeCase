@@ -6,6 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Pool;
+using UnityEngine.Rendering;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -23,8 +24,9 @@ namespace Gybe.Game
             _playerData = playerData;
             _playerData.OnLevelIncreased += OnLevelIncreased;
         }
-        
-        public DataListSO dataList;
+
+        public CropsData cropsData;
+        public PlantsData plantsData;
         private Dictionary<ItemClassSO, int> _productCounts;
         private List<ItemClassSO> _possibleCrops;
         private ObjectPool _pool;
@@ -33,9 +35,9 @@ namespace Gybe.Game
         void Start()
         {
             _productCounts = new Dictionary<ItemClassSO, int>();
-            foreach (var val in dataList.cropList)
+            foreach (var val in cropsData.dictionary)
             { 
-                _productCounts.Add(val.itemClass, 0);
+                _productCounts.Add(val.Value.itemClass, 0);
             }
 
             _possibleCrops = new List<ItemClassSO>();
@@ -68,7 +70,7 @@ namespace Gybe.Game
             {
                 var index = Random.Range(0, _possibleCrops.Count);
                 var itemClass = _possibleCrops[index];
-                if (dataList.FindCrop(itemClass).maximumProductCount > _productCounts[itemClass])
+                if (cropsData.dictionary[itemClass].maximumProductCount > _productCounts[itemClass])
                 {
                     SpawnProduct(itemClass);
                     return true;
@@ -80,10 +82,10 @@ namespace Gybe.Game
         
         private void SpawnProduct(ItemClassSO product)
         {
-            var crop = dataList.FindCrop(product);
-            if (crop != null)
+            var cropSO = cropsData.dictionary[product];
+            if (cropSO != null)
             {
-                var plantItemClass = crop.plant.itemClass;
+                var plantItemClass = cropSO.plant.itemClass;
                 
                 var val = _pool.Get(plantItemClass);
                 if (val != null)
@@ -94,8 +96,8 @@ namespace Gybe.Game
                         val.transform.position = spawnPosition.Value;
                         
                         int cropCount =
-                            Math.Min(dataList.FindCrop(product).maximumProductCount - _productCounts[product],
-                                crop.howManyProduct);
+                            Math.Min(cropSO.maximumProductCount - _productCounts[product],
+                                cropSO.howManyProduct);
 
                         List<Crop> crops = new List<Crop>();
                         for (int i = 0; i < cropCount; i++)
@@ -139,11 +141,11 @@ namespace Gybe.Game
         
         private void CheckPossibleCrops()
         {
-            foreach (var val in dataList.cropList)
+            foreach (var val in cropsData.dictionary)
             {
-                if (val.minimumLevel <= _playerData.Level && !_possibleCrops.Contains(val.itemClass))
+                if (val.Value.minimumLevel <= _playerData.Level && !_possibleCrops.Contains(val.Value.itemClass))
                 {
-                    _possibleCrops.Add(val.itemClass);
+                    _possibleCrops.Add(val.Value.itemClass);
                 }
             }
         }
