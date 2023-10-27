@@ -41,8 +41,6 @@ namespace Gybe.Game
 
         public void CreateRandomOrder()
         {
-            //List<CropSO> crops = data.cropList.FindAll(item => item.minimumLevel <= _playerData.Level);
-            
             IEnumerable<KeyValuePair<ItemClassSO, CropSO>> results = cropsData.dictionary.Where(item => item.Value.minimumLevel <= _playerData.Level);
 
             var index = Random.Range(0, results.Count());
@@ -57,7 +55,7 @@ namespace Gybe.Game
             
             list.Add(piece);
             
-            Order newOrder = new Order(list);
+            Order newOrder = new Order(list, _playerData.BaseGoldForOrder * _playerData.Level, _playerData.BaseExpForOrder * _playerData.Level);
             
             var ui = Container.InstantiatePrefabForComponent<OrderUI>(orderUIPrefab, transform.GetChild(0));
             ui.Initialize(newOrder);
@@ -69,6 +67,8 @@ namespace Gybe.Game
             foreach (var piece in order.pieces)
             {
                 _playerData.CollectedCrops[piece.crop] -= piece.quantity;
+                _playerData.GainExperience(order.experience);
+                _playerData.GainGold(order.gold);
                 CreateRandomOrder();
             }
         }

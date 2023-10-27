@@ -44,4 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a555bf5b30a247a682e2ddc8c2236d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseExpForOrder: 10
+  baseGoldForOrder: 50
   cropsData: {fileID: 11400000, guid: 805eef7e1401f496b9047aac2f0c35e7, type: 2}
+  baseExpNeededForLevel: 100

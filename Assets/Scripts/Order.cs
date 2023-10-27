@@ -16,10 +16,13 @@ namespace Gybe.Game
         }
 
         public List<Piece> pieces;
-
-        public Order(List<Piece> list)
+        public int gold;
+        public int experience;
+        public Order(List<Piece> list, int g, int exp)
         {
             pieces = list;
+            gold = g;
+            experience = exp;
         }
     }
 }

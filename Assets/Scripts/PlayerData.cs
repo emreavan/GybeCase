@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,72 +7,108 @@ namespace Gybe.Game
     public interface IPlayerData
     {
         void CollectCrop(ItemClassSO itemClass, int amount);
-        void RemoveCrop(CropSO crop, int amount);
+        void DeductCrop(CropSO crop, int amount);
         void GainExperience(int amount);
-        
-        int Gold { get; set;}
-        int Experience { get; set;}
-        int Level { get; set; }
-        int Speed { get; set;}
-        int CollectionRange { get; set;}
-        
-        int BaseExp { get; set;}
+        void GainGold(int amount);
+        void SetSpeed(float speed);
+        void SetCollectionRange(float range);
+
+        int Gold { get; }
+        int Experience { get; }
+        int Level { get; }
+        float Speed { get; }
+        float CollectionRange { get; }
+        int BaseExpForOrder { get; }
+        int BaseGoldForOrder { get; }
         Dictionary<ItemClassSO, int> CollectedCrops { get; }
         
-        public event Action<int> OnLevelIncreased;
+        event Action<int> OnLevelIncreased;
     }
-    
+
     [System.Serializable]
     public class PlayerData : MonoBehaviour, IPlayerData
     {
-        public int Gold { get; set; }
-        public int Experience { get; set; }
-        public int Level { get; set; }
-        public int Speed { get; set; }
-        public int CollectionRange { get; set; }
-        public int BaseExp { get; set;}
+        public int Gold { get; private set; }
+        public int Experience { get; private set; }
+        public int Level { get; private set; } = 1;
+        public float Speed { get; private set; }
+        public float CollectionRange { get; private set; }
         
-        public CropsData cropsData;
+        [SerializeField] private int baseExpForOrder;
+        public int BaseExpForOrder => baseExpForOrder;
+        
+        [SerializeField] private int baseGoldForOrder;
+        public int BaseGoldForOrder => baseGoldForOrder;
+        
+        [SerializeField] private CropsData cropsData;
+        
+        [SerializeField] private int baseExpNeededForLevel = 100;
+        
         public event Action<int> OnLevelIncreased;
+        
         public Dictionary<ItemClassSO, int> CollectedCrops { get; private set; }
-        // Start is called before the first frame update
-        void Start()
+        
+        private void Awake()
         {
-            Level = 1;
             CollectedCrops = new Dictionary<ItemClassSO, int>();
-            
-            foreach (var val in cropsData.dictionary)
-            { 
-                CollectedCrops.Add(val.Value.itemClass, 0);
+            foreach (var key in cropsData.dictionary.Keys)
+            {
+                CollectedCrops[key] = 0;
+            }
+        }
+        
+        public void CollectCrop(ItemClassSO itemClass, int amount)
+        {
+            if (CollectedCrops.ContainsKey(itemClass))
+            {
+                CollectedCrops[itemClass] += amount;
             }
         }
 
-        public void CollectCrop(ItemClassSO itemClass, int amount)
+        public void DeductCrop(CropSO crop, int amount)
         {
-            CollectedCrops[itemClass] += amount;
-        }
-
-        public void RemoveCrop(CropSO crop, int amount)
-        {
-            CollectedCrops[crop.itemClass] -= amount;
+            if (CollectedCrops.ContainsKey(crop.itemClass))
+            {
+                CollectedCrops[crop.itemClass] -= amount;
+                if (CollectedCrops[crop.itemClass] < 0) CollectedCrops[crop.itemClass] = 0;
+            }
         }
         
         public void GainExperience(int amount)
         {
             Experience += amount;
 
-            while(Experience >= XPForNextLevel())
+            while (Experience >= XPForNextLevel())
             {
-                Experience -= XPForNextLevel();
-                Level++;
-                OnLevelIncreased?.Invoke(Level);
+                LevelUp();
             }
         }
-        
-        int XPForNextLevel()
+    
+        private void LevelUp()
         {
-            return BaseExp * Level * Level;
+            Experience -= XPForNextLevel();
+            Level++;
+            OnLevelIncreased?.Invoke(Level);
         }
 
+        private int XPForNextLevel()
+        {
+            return baseExpNeededForLevel * Level;
+        }
+
+        public void GainGold(int amount)
+        {
+            Gold += amount;
+        }
+
+        public void SetSpeed(float speed)
+        {
+            Speed = speed;
+        }
+
+        public void SetCollectionRange(float range)
+        {
+            CollectionRange = range;
+        }
     }
 }
