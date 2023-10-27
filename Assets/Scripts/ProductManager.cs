@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -20,13 +21,15 @@ namespace Gybe.Game
         public void Construct(IPlayerData playerData)
         {
             _playerData = playerData;
+            _playerData.OnLevelIncreased += OnLevelIncreased;
         }
         
         public DataListSO dataList;
         private Dictionary<ItemClassSO, int> _productCounts;
-
+        private List<ItemClassSO> _possibleCrops;
         private ObjectPool _pool;
-        
+        public float spawnWaitTimeInSec = 0.5f;
+        private float _currentWaitTime = 0.0f;
         void Start()
         {
             _productCounts = new Dictionary<ItemClassSO, int>();
@@ -34,6 +37,10 @@ namespace Gybe.Game
             { 
                 _productCounts.Add(val.itemClass, 0);
             }
+
+            _possibleCrops = new List<ItemClassSO>();
+
+            CheckPossibleCrops();
 
             _pool = GetComponent<ObjectPool>();
             if (_pool == null)
@@ -44,16 +51,34 @@ namespace Gybe.Game
 
         }
 
+
         void Update()
         {
-            if (Input.GetKeyUp(KeyCode.A)) // Example trigger
+            _currentWaitTime += Time.deltaTime;
+            if (_currentWaitTime > spawnWaitTimeInSec)
             {
-                SpawnProductRandom(dataList.cropList[0].itemClass);
+                SpawnRandomProduct();
+                _currentWaitTime -= spawnWaitTimeInSec;
             }
         }
+
+        private bool SpawnRandomProduct()
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                var index = Random.Range(0, _possibleCrops.Count);
+                var itemClass = _possibleCrops[index];
+                if (dataList.FindCrop(itemClass).maximumProductCount > _productCounts[itemClass])
+                {
+                    SpawnProduct(itemClass);
+                    return true;
+                }
+            }
+
+            return false;
+        } 
         
-        
-        private void SpawnProductRandom(ItemClassSO product)
+        private void SpawnProduct(ItemClassSO product)
         {
             var crop = dataList.FindCrop(product);
             if (crop != null)
@@ -68,7 +93,6 @@ namespace Gybe.Game
                     {
                         val.transform.position = spawnPosition.Value;
                         
-
                         int cropCount =
                             Math.Min(dataList.FindCrop(product).maximumProductCount - _productCounts[product],
                                 crop.howManyProduct);
@@ -80,14 +104,15 @@ namespace Gybe.Game
                             if (valCrop != null)
                             {
                                 var cropObj = valCrop.GetComponent<Crop>();
-                                cropObj.OnObjectCollected += Depool;
+                                cropObj.OnObjectCollected += DePool;
                                 crops.Add(cropObj);
                             }
                         }
                         
                         var plant = val.GetComponent<Plant>();
-                        plant.OnObjectCollected += Depool;
+                        plant.OnObjectCollected += DePool;
                         plant.SetCrops(crops);
+                        _productCounts[product] += cropCount;
                     }
                     else
                     {
@@ -97,15 +122,35 @@ namespace Gybe.Game
             }
         }
 
-        private void Depool(GameObject obj)
+        private void DePool(GameObject obj)
         {
             var item = obj.GetComponent<Item>();
+
+            if (obj.TryGetComponent<Crop>(out Crop cropVal))
+            {
+                _productCounts[cropVal.itemClass] -= 1;
+                _playerData.CollectCrop(cropVal.cropSO, 1);
+            }
             
-            if(obj.TryGetComponent<Crop>(out Crop cropVal))
-                _playerData.CollectCrop(cropVal.cropSO);
-            
-            item.OnObjectCollected -= Depool;
+            item.OnObjectCollected -= DePool;
             _pool.Return(item.itemClass, obj);
+        }
+        
+        
+        private void CheckPossibleCrops()
+        {
+            foreach (var val in dataList.cropList)
+            {
+                if (val.minimumLevel <= _playerData.Level && !_possibleCrops.Contains(val.itemClass))
+                {
+                    _possibleCrops.Add(val.itemClass);
+                }
+            }
+        }
+        
+        private void OnLevelIncreased(int obj)
+        {
+            CheckPossibleCrops();
         }
     }
 }

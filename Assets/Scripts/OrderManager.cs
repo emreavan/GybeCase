@@ -40,7 +40,7 @@ namespace Gybe.Game
 
         public void CreateRandomOrder()
         {
-            List<CropSO> crops = data.cropList.FindAll(item => item.minimumLevel == _playerData.Level);
+            List<CropSO> crops = data.cropList.FindAll(item => item.minimumLevel <= _playerData.Level);
 
             var index = Random.Range(0, crops.Count);
 
@@ -48,7 +48,7 @@ namespace Gybe.Game
             
             Order.Piece piece;
             piece.crop = crops[index].itemClass;
-            piece.quantity = Random.Range(0, 10 * _playerData.Experience);
+            piece.quantity = Random.Range(0, 10 * _playerData.Level);
             
             list.Add(piece);
             Order newOrder = new Order(list);
