@@ -21,5 +21,5 @@ MonoBehaviour:
   spawnCoefficient: 1
   howManyProduct: 5
   readyTimeInMs: 1000
-  maximumProductCount: 10
-  minimumLevel: 0
+  maximumProductCount: 100
+  minimumLevel: 1

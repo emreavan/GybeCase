@@ -57,7 +57,7 @@ namespace Gybe.Game
             
             Order newOrder = new Order(list, _playerData.BaseGoldForOrder * _playerData.Level, _playerData.BaseExpForOrder * _playerData.Level);
             
-            var ui = Container.InstantiatePrefabForComponent<OrderUI>(orderUIPrefab, transform.GetChild(0));
+            var ui = Container.InstantiatePrefabForComponent<OrderUI>(orderUIPrefab, transform);
             ui.Initialize(newOrder);
             ui.OnOrderCompleted += UiOnOnOrderCompleted;
         }
