@@ -12,7 +12,8 @@ namespace Gybe.Game
         void GainGold(int amount);
         void SetSpeed(float speed);
         void SetCollectionRange(float range);
-
+        int XPForNextLevel();
+        
         int Gold { get; }
         int Experience { get; }
         int Level { get; }
@@ -91,11 +92,6 @@ namespace Gybe.Game
             OnLevelIncreased?.Invoke(Level);
         }
 
-        private int XPForNextLevel()
-        {
-            return baseExpNeededForLevel * Level;
-        }
-
         public void GainGold(int amount)
         {
             Gold += amount;
@@ -109,6 +105,11 @@ namespace Gybe.Game
         public void SetCollectionRange(float range)
         {
             CollectionRange = range;
+        }
+        
+        public int XPForNextLevel()
+        {
+            return baseExpNeededForLevel * Level;
         }
     }
 }
