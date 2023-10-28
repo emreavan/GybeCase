@@ -18,7 +18,22 @@ namespace Gybe.Game
         
         void Update()
         {
-            goldAmount.text = _playerData.Gold.ToString();
+            goldAmount.text = FormatCoinAmount(_playerData.Gold);
+        }
+        
+        string FormatCoinAmount(int amount)
+        {
+            if (amount < 1000)
+                return amount.ToString();
+
+            if (amount < 1000000) // Less than a million
+                return (amount / 1000.0).ToString("0.#") + "K"; 
+
+            if (amount < 1000000000) // Less than a billion
+                return (amount / 1000000.0).ToString("0.#") + "M";
+
+            // For amounts greater than or equal to a billion
+            return (amount / 1000000000.0).ToString("0.#") + "B";
         }
     }
 }
