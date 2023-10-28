@@ -22,4 +22,4 @@ MonoBehaviour:
   howManyProduct: 3
   readyTimeInMs: 1000
   maximumProductCount: 100
-  minimumLevel: 2
+  minimumLevel: 3
