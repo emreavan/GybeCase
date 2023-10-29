@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Gybe.Game;
 using UnityEngine;
 using Zenject;
 
@@ -8,10 +5,11 @@ namespace Gybe.Game
 {
     public class GameInstaller : MonoInstaller
     {
-        public GameObject playerDataServicePrefab;
-        public GameObject productManagerPrefab;
-        public GameObject groundPrefab;
-        public OrderUI orderUIPrefab;
+        [SerializeField] private GameObject playerDataServicePrefab;
+        [SerializeField] private GameObject productManagerPrefab;
+        [SerializeField] private GameObject groundPrefab;
+        [SerializeField] private OrderUI orderUIPrefab;
+        
         public override void InstallBindings()
         {
             Container.Bind<IPlayerData>()

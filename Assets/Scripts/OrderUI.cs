@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,35 +9,42 @@ namespace Gybe.Game
 {
     public class OrderUI : MonoBehaviour
     {
-        public List<TMP_Text> textList;
-        public List<Image> imageList;
-        public TMP_Text gold;
+        public event Action<Order> OnOrderCompleted;
+        
+        [SerializeField] private List<TMP_Text> textList;
+        [SerializeField] private List<Image> imageList;
+        [SerializeField] private TMP_Text gold;
+        [SerializeField] private CropsData cropsData;
+        
         private Order _order;
         private Animator _animator;
         private bool? _previousIsReady;
-        public event Action<Order> OnOrderCompleted;
-        public CropsData cropsData;
-        private IPlayerData _playerData;
         
+        private IPlayerData _playerData;
         [Inject]
         public void Construct(IPlayerData playerData)
         {
             _playerData = playerData;
         }
-        void Start()
+        
+        void OnEnable()
         {
             _animator = GetComponent<Animator>();
             _previousIsReady = false;
         }
 
-        // Update is called once per frame
         void Update()
+        {
+            UpdateUI();
+        }
+
+        void UpdateUI()
         {
             bool isReady = true;
             for (int i = 0; i < _order.pieces.Count; i++)
             {
                 textList[i].text = _playerData.CollectedCrops[_order.pieces[i].crop].ToString()
-                + " / " + _order.pieces[i].quantity.ToString();
+                                   + " / " + _order.pieces[i].quantity.ToString();
 
                 isReady = (isReady && (_playerData.CollectedCrops[_order.pieces[i].crop] - _order.pieces[i].quantity) >= 0)
                     ? true
@@ -69,6 +75,8 @@ namespace Gybe.Game
             }
 
             gold.text = _order.gold.ToString();
+
+            UpdateUI();
         }
 
         public void ButtonClicked()

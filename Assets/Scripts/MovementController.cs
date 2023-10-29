@@ -1,25 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using Gybe.Game;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 using UnityEngine.EventSystems;
+
 namespace Gybe.Game
 {
-
     public class MovementController : MonoBehaviour
     {
-        public Image joystickBase;
-        public Image joystickHandle;
+        [SerializeField] private Image joystickBase;
+        [SerializeField] private Image joystickHandle;
 
         private bool _isDragging = false;
         private Vector2 _startTouch;
-        public Vector2 swipeDelta;
+        private Vector2 swipeDelta;
 
         public float speed = 5f;
-    public float rotationSpeed = 200f;
+        public float rotationSpeed = 200f;
         public float maxJoystickDelta = 50f; // Max distance joystick handle can move
 
         private UnityEngine.AI.NavMeshAgent _agent;
@@ -52,11 +48,21 @@ namespace Gybe.Game
 
         void Update()
         {
-            swipeDelta = Vector2.zero;
-            if (EventSystem.current.IsPointerOverGameObject() && _isDragging == false)
+            
+            // For Mouse Input
+            if (Input.GetMouseButtonDown(0) && EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }
+
+            // For Touch Input
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+            {
+                return;
+            }
+            
+            swipeDelta = Vector2.zero;
+            
             if (Input.GetMouseButtonDown(0))
             {
                 _isDragging = true;

@@ -1,10 +1,8 @@
-using System.Collections;
 using UnityEngine;
 using System;
 
 namespace Gybe.Game
 {
-
     public class Item : MonoBehaviour
     {
         public event Action<GameObject> OnObjectCollected;

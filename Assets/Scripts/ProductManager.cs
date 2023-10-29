@@ -1,15 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.Pool;
-using UnityEngine.Rendering;
 using Zenject;
 using Random = UnityEngine.Random;
-
+using Gybe.Util;
 
 namespace Gybe.Game
 {
@@ -19,23 +13,23 @@ namespace Gybe.Game
     }
     public class ProductManager : MonoBehaviour, IProductManager
     {
+        [SerializeField] private float spawnWaitTimeInSec = 0.5f;
+        [SerializeField] private CropsData cropsData;
+        [SerializeField] private PlantsData plantsData;
+        
+        private Dictionary<ItemClassSO, int> _productCounts;
+        private List<ItemClassSO> _possibleCrops;
+        private ObjectPool _pool;
+        private float _currentWaitTime = 0.0f;
         
         private IPlayerData _playerData;
-
         [Inject]
         public void Construct(IPlayerData playerData)
         {
             _playerData = playerData;
             _playerData.OnLevelIncreased += OnLevelIncreased;
         }
-
-        public CropsData cropsData;
-        public PlantsData plantsData;
-        private Dictionary<ItemClassSO, int> _productCounts;
-        private List<ItemClassSO> _possibleCrops;
-        private ObjectPool _pool;
-        public float spawnWaitTimeInSec = 0.5f;
-        private float _currentWaitTime = 0.0f;
+        
         void Start()
         {
             _productCounts = new Dictionary<ItemClassSO, int>();
@@ -54,10 +48,8 @@ namespace Gybe.Game
                 Debug.LogWarning("There is no pool!");
                 return;
             }
-
         }
-
-
+        
         void Update()
         {
             _currentWaitTime += Time.deltaTime;
@@ -80,7 +72,7 @@ namespace Gybe.Game
                     return true;
                 }
             }
-
+            
             return false;
         } 
         
@@ -141,7 +133,6 @@ namespace Gybe.Game
             item.OnObjectCollected -= DePool;
             _pool.Return(item.itemClass, obj);
         }
-        
         
         private void CheckPossibleCrops()
         {

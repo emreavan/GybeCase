@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +7,11 @@ namespace Gybe.Game
 {
     public class ExperienceUI : MonoBehaviour
     {
+        [SerializeField] private TMP_Text currentLevelText;
+        [SerializeField] private TMP_Text nextLevelText;
+        [SerializeField] private Image loadingImage;
+        
         private IPlayerData _playerData;
-
-        public TMP_Text currentLevelText;
-        public TMP_Text nextLevelText;
-        public Image loadingImage;
         
         [Inject]
         public void Construct(IPlayerData playerData)
@@ -22,8 +19,6 @@ namespace Gybe.Game
             _playerData = playerData;
         }
         
-
-        // Update is called once per frame
         void Update()
         {
             currentLevelText.text = _playerData.Level.ToString();

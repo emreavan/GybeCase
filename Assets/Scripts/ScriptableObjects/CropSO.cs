@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 namespace Gybe.Game
 {
@@ -11,7 +10,7 @@ namespace Gybe.Game
         public ItemClassSO plantItemClass;
         public float spawnCoefficient;
         public int howManyProduct;
-        public float readyTimeInMs;
+        [FormerlySerializedAs("readyTimeInMs")] public float readyTimeInSec;
         public int maximumProductCount;
         public int minimumLevel;
     }

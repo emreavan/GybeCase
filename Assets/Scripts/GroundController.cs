@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Gybe.Game;
 using Unity.AI.Navigation;
 using UnityEngine;
 using Zenject;
@@ -11,21 +8,17 @@ namespace Gybe.Game
     public interface IGroundController
     {
         Vector3 LocalScale { get; }
-        
         NavMeshSurface NavMeshSurface { get;  }
-        
         Renderer GroundRenderer{ get; }
-        event Action<Vector3, Vector3> OnGroundScaleIncreaseStart;
         
+        event Action<Vector3, Vector3> OnGroundScaleIncreaseStart;
     }
 
     public class GroundController : MonoBehaviour, IGroundController
     {
         public Vector3 scaleCoefficient = new Vector3(0.1f, 0f, 0.1f);
         public float scalingSpeed = 0.1f;
-
         public NavMeshSurface NavMeshSurface { get; private set; }
-
         public Vector3 LocalScale { get; private set; }
         public  Renderer GroundRenderer{ get; private set; }
         public event Action<Vector3, Vector3> OnGroundScaleIncreaseStart;
@@ -39,7 +32,6 @@ namespace Gybe.Game
             _playerData.OnLevelIncreased += OnLevelIncreased;
         }
 
-
         private void Start()
         {
             NavMeshSurface = GetComponentInChildren<NavMeshSurface>();
@@ -51,7 +43,6 @@ namespace Gybe.Game
             }
 
             LocalScale = transform.localScale;
-
             GroundRenderer = NavMeshSurface.GetComponent<Renderer>();
         }
 

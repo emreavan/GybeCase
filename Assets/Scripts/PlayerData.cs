@@ -22,7 +22,6 @@ namespace Gybe.Game
         int BaseExpForOrder { get; }
         int BaseGoldForOrder { get; }
         Dictionary<ItemClassSO, int> CollectedCrops { get; }
-        
         event Action<int> OnLevelIncreased;
     }
 
@@ -34,6 +33,8 @@ namespace Gybe.Game
         public int Level { get; private set; } = 1;
         public float Speed { get; private set; }
         public float CollectionRange { get; private set; }
+        public Dictionary<ItemClassSO, int> CollectedCrops { get; private set; }
+        public event Action<int> OnLevelIncreased;
         
         [SerializeField] private int baseExpForOrder;
         public int BaseExpForOrder => baseExpForOrder;
@@ -45,16 +46,12 @@ namespace Gybe.Game
         
         [SerializeField] private int baseExpNeededForLevel = 100;
         
-        public event Action<int> OnLevelIncreased;
-        
-        public Dictionary<ItemClassSO, int> CollectedCrops { get; private set; }
-        
         private void Awake()
         {
             CollectedCrops = new Dictionary<ItemClassSO, int>();
             foreach (var key in cropsData.dictionary.Keys)
             {
-                CollectedCrops[key] = 0;
+                CollectedCrops[key] = 10000;
             }
         }
         

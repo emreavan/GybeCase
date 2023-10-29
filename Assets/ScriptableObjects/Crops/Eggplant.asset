@@ -20,6 +20,6 @@ MonoBehaviour:
   plantItemClass: {fileID: 11400000, guid: 613c6574fe3424586903bbab914a3970, type: 2}
   spawnCoefficient: 1
   howManyProduct: 3
-  readyTimeInMs: 1000
+  readyTimeInSec: 1
   maximumProductCount: 100
   minimumLevel: 2

@@ -1,29 +1,23 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using Gybe.Util;
 
 namespace Gybe.Game
 {
     public class Plant : Item
     {
-        public List<Transform> spawnPositions;
-
-        private List<Crop> _crops;
+        [SerializeField] private List<Transform> spawnPositions;
+        [SerializeField] private  ParticleSystem readyParticle;
         
         [Range(0, 10)]
         public float scatterDistance = 3.0f;
-        // Start is called before the first frame update
-        void Start()
-        {
-        }
 
-        // Update is called once per frame
-        void Update()
-        {
+        private List<Crop> _crops;
+        private BoxCollider _collider;
+        private Vector3 _localScale = new Vector3(-1,-1,-1);
 
-        }
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -42,17 +36,20 @@ namespace Gybe.Game
                 if (spawnPosition.HasValue)
                 {
                     crop.Scatter(spawnPosition.Value);
-                    //crop.transform.position = spawnPosition.Value;
                 }
             }
         }
+        
         public void SetCrops(List<Crop> cropList)
         {
+            float waitTime = 0.0f;
             _crops = cropList;
             var count = Math.Min(_crops.Count, spawnPositions.Count);
             for (int i = 0; i < count; i++)
             {
+                waitTime = Mathf.Max(waitTime, _crops[i].cropSO.readyTimeInSec);
                 _crops[i].transform.position = spawnPositions[i].position;
+                _crops[i].StartScale();
             }
 
             for (int i = count; i < _crops.Count; i++)
@@ -60,19 +57,55 @@ namespace Gybe.Game
                 _crops[i].transform.position = transform.position;
                 _crops[i].gameObject.SetActive(false);
             }
+
+            StartAnimation(waitTime);
         }
 
+        private void StartAnimation(float waitTime)
+        {
+            transform.localScale = Vector3.zero;
+            StartCoroutine(ScalePlant(waitTime));
+        }
+        
         private void OnEnable()
         {
+            if (_collider == null)
+                _collider = GetComponent<BoxCollider>();
+            
+            _collider.enabled = false;
+            
+            if(_localScale.x < 0)
+                _localScale = transform.localScale;
+
             if(_crops == null)
                 _crops = new List<Crop>();
         }
 
+        private IEnumerator ScalePlant(float waitTime)
+        {
+            float startTime = Time.time;
+            
+            while (Vector3.Distance(transform.localScale, _localScale) > 0.1f)
+            {
+                transform.localScale = Vector3.Lerp(transform.localScale, _localScale, 0.4f);
+                yield return new WaitForEndOfFrame();
+            }
+
+            transform.localScale = _localScale;
+            
+            while (startTime + waitTime > Time.time)
+            {
+                yield return new WaitForEndOfFrame();
+            }
+            
+            _collider.enabled = true;
+            readyParticle.Play();
+        }
+        
         private void OnDisable()
         {
+            transform.localScale = _localScale;
             _crops.Clear();
-            
         }
-            
     }
 }
