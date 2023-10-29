@@ -4,13 +4,13 @@
 
 ## Features
 
-- I've decided to not use Singleton pattern for `PlayerData` and managers. For this reason I've used Dependency Injection and create multiple prefabs for injection.
+- I've decided to not use Singleton pattern for `PlayerData` and managers. For this reason I've used `Dependency Injection` and create multiple prefabs for injection. Other than that between `OrderManager` and `OrderUI` and between `ProductManager` and `Plant`, `Observer Pattern` is used.
 
 - Crops are not a part of plants and retrieved from the pool at plant generation. It is possible to add more spawn positions at the plants and if there are more crops than the spawn positions at the plant, other crops are set not active. After crops are ready to be harvest, a particle effect is played.
 
 <img src="https://drive.google.com/uc?export=download&id=16SDxSdNRBLnZBdMTb5v0fB75f_5XdL5T" width="200">
 
-- For a simple ground it might be a overkill but for future proof, I've used `NavMeshSurface and NavMeshAgent` for Character movement. Every time ground is scaled, `NavMeshSurface` is also baked once again. Only `Ground` layer is taken into consideration while `NavMeshSurface` is baked.
+- For a simple ground it might be a overkill but for future proof, I've used `NavMeshSurface` and `NavMeshAgent` for Character movement. Every time ground is scaled, `NavMeshSurface` is also baked once again. Only `Ground` layer is taken into consideration while `NavMeshSurface` is baked.
 
 <img src="https://drive.google.com/uc?export=download&id=1HfowR6W68eEQMbhXIOuXOpQ1JqO3z5sh" width="200">
 
