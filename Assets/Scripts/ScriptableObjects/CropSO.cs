@@ -8,7 +8,6 @@ namespace Gybe.Game
     {
         public Sprite sprite;
         public ItemClassSO plantItemClass;
-        public float spawnCoefficient;
         public int howManyProduct;
         [FormerlySerializedAs("readyTimeInMs")] public float readyTimeInSec;
         public int maximumProductCount;
