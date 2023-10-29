@@ -17,7 +17,8 @@ namespace Gybe.Game
         private List<Crop> _crops;
         private BoxCollider _collider;
         private Vector3 _localScale = new Vector3(-1,-1,-1);
-
+        private const float ScaleCheck = 0.1f;
+        private const float ScaleCoeff = 0.4f;
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -84,10 +85,11 @@ namespace Gybe.Game
         private IEnumerator ScalePlant(float waitTime)
         {
             float startTime = Time.time;
+
             
-            while (Vector3.Distance(transform.localScale, _localScale) > 0.1f)
+            while (Vector3.Distance(transform.localScale, _localScale) > ScaleCheck)
             {
-                transform.localScale = Vector3.Lerp(transform.localScale, _localScale, 0.4f);
+                transform.localScale = Vector3.Lerp(transform.localScale, _localScale, ScaleCoeff);
                 yield return new WaitForEndOfFrame();
             }
 

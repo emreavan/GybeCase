@@ -12,8 +12,8 @@ namespace Gybe.Game
 
         private Vector3 _offset;
         private Camera _camera;
-        private const float _referenceAspectRatio = 9f / 16f;
-
+        private const float ReferenceAspectRatio = 9f / 16f;
+        private float _sizeCheck = 0.1f;
         private IGroundController _groundController;
 
         [Inject]
@@ -63,7 +63,7 @@ namespace Gybe.Game
             float currentAspectRatio = Screen.width / (float)Screen.height;
 
             float adjustedOrthographicSize =
-                desiredOrthographicSizeForReference * (_referenceAspectRatio / currentAspectRatio);
+                desiredOrthographicSizeForReference * (ReferenceAspectRatio / currentAspectRatio);
 
             return adjustedOrthographicSize;
         }
@@ -72,7 +72,7 @@ namespace Gybe.Game
         {
             float desiredOrthographicSize = CalculateOrthographicSize(finalScale, size);
 
-            while (Mathf.Abs(desiredOrthographicSize - _camera.orthographicSize) > 0.1f)
+            while (Mathf.Abs(desiredOrthographicSize - _camera.orthographicSize) > _sizeCheck)
             {
                 _camera.orthographicSize =
                     Mathf.Lerp(_camera.orthographicSize, desiredOrthographicSize, scalingSpeed);

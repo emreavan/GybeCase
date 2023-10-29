@@ -13,7 +13,8 @@ namespace Gybe.Game
 
         private SphereCollider _collider;
         private Vector3 _localScale = new Vector3(-1,-1,-1);
-        
+        private const float DistanceCheck = 0.2f;
+        private const float ScaleCheck = 0.1f;
         public void Scatter(Vector3 targetPosition)
         {
             StartCoroutine(MoveCrop(targetPosition));
@@ -27,7 +28,7 @@ namespace Gybe.Game
         
         private IEnumerator MoveCrop(Vector3 targetPosition)
         {
-            while (Vector3.Distance(transform.position, targetPosition) > 0.2f)
+            while (Vector3.Distance(transform.position, targetPosition) > DistanceCheck)
             {
                 transform.position = Vector3.Lerp(transform.position, targetPosition, scatterAnimCoeff * Time.deltaTime);
                 yield return new WaitForEndOfFrame();
@@ -39,7 +40,7 @@ namespace Gybe.Game
 
         private IEnumerator ScaleCrop()
         {
-            while (Vector3.Distance(transform.localScale, _localScale) > 0.1f)
+            while (Vector3.Distance(transform.localScale, _localScale) > ScaleCheck)
             {
                 transform.localScale = Vector3.Lerp(transform.localScale, _localScale, 0.1f);
                 yield return new WaitForEndOfFrame();
