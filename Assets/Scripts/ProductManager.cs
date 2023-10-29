@@ -30,6 +30,15 @@ namespace Gybe.Game
             _playerData.OnLevelIncreased += OnLevelIncreased;
         }
         
+        private IGroundController _groundController;
+
+        [Inject]
+        public void Construct(IGroundController groundController)
+        {
+            _groundController = groundController;
+        }
+        
+        
         void Start()
         {
             _productCounts = new Dictionary<ItemClassSO, int>();
@@ -86,7 +95,7 @@ namespace Gybe.Game
                 var val = _pool.Get(plantItemClass);
                 if (val != null)
                 {
-                    Vector3? spawnPosition = NavMeshUtils.FindRandomPosition(Random.Range(0.5f, 10.0f), -1);
+                    Vector3? spawnPosition = NavMeshUtils.FindRandomPosition(Random.Range(0.5f, _groundController.GroundRenderer.bounds.size.x / 2.0f), -1);
                     if (spawnPosition.HasValue)
                     {
                         val.transform.position = spawnPosition.Value;
