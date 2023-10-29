@@ -13,7 +13,11 @@ using Random = UnityEngine.Random;
 
 namespace Gybe.Game
 {
-    public class ProductManager : MonoBehaviour
+    public interface IProductManager
+    {
+        
+    }
+    public class ProductManager : MonoBehaviour, IProductManager
     {
         
         private IPlayerData _playerData;
