@@ -51,7 +51,7 @@ namespace Gybe.Game
             
             Order.Piece piece;
             piece.crop = listResults[index].Key;
-            piece.quantity = Random.Range(0, 10 * _playerData.Level);
+            piece.quantity = Random.Range(1, 10 * _playerData.Level);
             
             list.Add(piece);
             
