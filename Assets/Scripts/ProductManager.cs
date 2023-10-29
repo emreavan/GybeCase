@@ -72,7 +72,7 @@ namespace Gybe.Game
         {
             for (int i = 0; i < 30; i++)
             {
-                var index = Random.Range(0, _possibleCrops.Count);
+                var index = Random.Range(1, _possibleCrops.Count);
                 var itemClass = _possibleCrops[index];
                 if (cropsData.dictionary[itemClass].maximumProductCount > _productCounts[itemClass])
                 {
