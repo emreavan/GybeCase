@@ -51,7 +51,7 @@ namespace Gybe.Game
             CollectedCrops = new Dictionary<ItemClassSO, int>();
             foreach (var key in cropsData.dictionary.Keys)
             {
-                CollectedCrops[key] = 10000;
+                CollectedCrops[key] = 0;
             }
         }
         
